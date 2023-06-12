@@ -110,11 +110,7 @@ mvn -U io.quarkus:quarkus-maven-plugin:create \
 ```
 
 
-```shell script
-systemctl status docker
-docker ps -a
-docker image ls
-```
+
 
 ```shell script
 ./mvnw quarkus:dev
@@ -122,6 +118,7 @@ docker image ls
 
 ```shell script
 ./mvnw test
+./mvnw test -Dbooks.genre=IT
 ```
 
 ```shell script
@@ -131,3 +128,76 @@ curl http://localhost:8765/api/books
 curl http://localhost:8765/api/books/count
 ```
 
+## configuración
+>- http://localhost:8765/q/dev-ui/configuration-form-editor
+
+>- %dev
+>- %test
+>- %prod
+>- custom
+
+```
+mvn quarkus:dev
+mvn test
+java -jar
+-Dquarkus.profile
+```
+
+```
+./mvnw quarkus:dev
+./mvnw quarkus:dev -Dquarkus.profile=staging
+```
+
+```
+./mvnw package
+java -jar target/quarkus-app/quarkus-run.jar
+mvn package
+mvn package -Dquarkus.package.type=jar
+mvn package -Dquarkus.package.type=legacy-jar
+mvn package -Dquarkus.package.type=uber-jar
+java -jar target/quarkus-app/quarkus-run.jar
+mvn package -DskipTests -Dquarkus.package.type=uber-jar
+java -jar target/rest-book-1.0.0-SNAPSHOT-runner.jar
+```
+
+```
+mvn package -Dquarkus.package.type=native
+target\rest-book-1.0.0-SNAPSHOT-runner.exe
+mvn verify -Pnative
+mvn package -Pnative
+./target/rest-book-runner
+```
+
+```
+mvn quarkus:add-extension -Dextensions="container-image-docker"
+mvn package -Dquarkus.container-image.build=true -Dquarkus.package.type=jar
+mvn package -Dquarkus.container-image.build=true -Dquarkus.package.type=legacy -Dquarkus.container-image.tag=jvm
+mvn package -Dquarkus.container-image.build=true -Dquarkus.package.type=jar -Dquarkus.container-image.tag=jvm
+
+mvn package -Dquarkus.container-image.build=true -Dquarkus.package.type=jar
+mvn package -Dquarkus.container-image.build=true -Dquarkus.package.type=legacy-jar
+docker run -i --rm -p 8080:8080 agoncal/rest-book:1.0-SNAPSHOT
+```
+
+```
+mvn package -Dquarkus.container-image.build=true -Dquarkus.package.type=jar -Dquarkus.container-image.tag=jvm
+docker run -i --rm -p 8080:8080 luis1/rest-book:jvm
+```
+
+
+```shell script
+systemctl status docker
+docker ps -a
+docker image ls
+docker image ls | grep luis1
+docker run -i --rm -p 8765:8765 luis1/rest-book:jvm 
+docker build -f src/main/docker/Dockerfile.jvm -t luis13711/rest-book-jvm .
+docker run -i --rm -p 8080:8080 luis13711/rest-book-jvm 
+```
+
+# de esta forma funciona
+```
+mvn package
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus/rest-book-jvm .
+docker run -i --rm -p 8765:8765 quarkus/rest-book-jvm 
+```

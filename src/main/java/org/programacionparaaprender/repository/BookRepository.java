@@ -2,12 +2,18 @@ package org.programacionparaaprender.repository;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.programacionparaaprender.models.Book;
 import jakarta.enterprise.context.ApplicationScoped;
 
 
 @ApplicationScoped
 public class BookRepository {
+
+    @ConfigProperty(name="books.genre", defaultValue = "Sci-Fi")
+	private String genre;
+
     public Optional<Book> getBook(final String id){
         return getAllBooks().stream().filter(book -> book.id == Long.parseLong(id)).findFirst();
     }
@@ -22,7 +28,7 @@ public class BookRepository {
         book1.title = "Understanding Quarkus";
         book1.autor = "Antonio";
         book1.yearOfPublication = 2020;
-        book1.genre = "IT";
+        book1.genre = genre;
         Book book2;
         book2 = new Book();
         book2.id = 2L;
