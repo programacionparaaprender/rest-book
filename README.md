@@ -156,9 +156,14 @@ mvn package -Dquarkus.package.type=jar
 mvn package -Dquarkus.package.type=legacy-jar
 mvn package -Dquarkus.package.type=uber-jar
 java -jar target/quarkus-app/quarkus-run.jar
+```
+
+# otros comandos
+```
 mvn package -DskipTests -Dquarkus.package.type=uber-jar
 java -jar target/rest-book-1.0.0-SNAPSHOT-runner.jar
 ```
+
 
 ```
 mvn package -Dquarkus.package.type=native
@@ -200,4 +205,11 @@ docker run -i --rm -p 8080:8080 luis13711/rest-book-jvm
 mvn package
 docker build -f src/main/docker/Dockerfile.jvm -t quarkus/rest-book-jvm .
 docker run -i --rm -p 8765:8765 quarkus/rest-book-jvm 
+```
+
+# nuevo comando
+```
+mvn package -Dquarkus.container-image.build=true -Dquarkus.package.type=native
+mvn package -Dquarkus.container-image.build=true -Dquarkus.package.type=native -Dquarkus.container-image.build=true -Dquarkus.package.type=jar -Dquarkus.container-image.tag=native
+docker run -i --rm -p 8765:8765 luis1/rest-book:native
 ```
